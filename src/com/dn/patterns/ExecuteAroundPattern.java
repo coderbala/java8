@@ -8,7 +8,7 @@ import java.util.function.Consumer;
  * @author BPULI
  */
 public class ExecuteAroundPattern {
- 
+    
     public static void main(String[] args){
         Resource.use(
                 (resourceConsumer)->{
@@ -20,28 +20,31 @@ public class ExecuteAroundPattern {
 }
 
 class Resource{
-
+    
+    private static final Consumer<String> printMe = System.out :: println;
+    
     private Resource(){
-        System.out.println("Resource created.");
+        printMe.accept("Resource created.");
     }
     
     private void open(){
-        System.out.println("With in open");
+        printMe.accept("With in open");
     }
     public void operation1(){
-        System.out.println("Within operation 1");
+        printMe.accept("Within operation 1");
     }
     public void operation2(){
-        System.out.println("Within operation 2");
+        printMe.accept("Within operation 2");
     }
     private void close(){
-        System.out.println("Resource closed.");
+        printMe.accept("Resource closed.");
     }
     
     public static void use(Consumer<Resource> resourceConsumer){
         
         Resource resource = new Resource();
         try{
+            resource.open();
             resourceConsumer.accept(resource);
         }finally{
             resource.close();
